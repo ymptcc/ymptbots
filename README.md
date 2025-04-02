@@ -173,7 +173,7 @@
 
 🌟 我们提供专业的技术支持和定制开发服务
 
-- 📧 邮箱：admin@ympt.cc
+- 📧 邮箱：ymptcc@gmail.com
 - 🌐 网站：<a href="https://www.ympt.cc">源码平台网</a>
 - 💬 Telegram：<a href="https://t.me/ymptw">@ymptw</a>
 
