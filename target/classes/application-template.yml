@@ -1,0 +1,109 @@
+logging:
+  level:
+    root: info
+    com.geordie.telegram.bot.ympt: debug
+    com.geordie.telegram.bot.ympt.database: debug
+
+spring:
+  main:
+    allow-circular-references: true
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/tg_bot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 5 # 初始连接数
+      min-idle: 10 # 最小连接池数量
+      max-active: 20 # 最大连接池数量
+      max-wait: 600000 # 配置获取连接等待超时的时间，单位：毫秒
+      time-between-eviction-runs-millis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位：毫秒
+      min-evictable-idle-time-millis: 300000 # 配置一个连接在池中最小生存的时间，单位：毫秒
+      max-evictable-idle-time-millis: 900000 # 配置一个连接在池中最大生存的时间，单位：毫秒
+      validation-query: SELECT 1 FROM DUAL # 配置检测连接是否有效
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+  # Redis配置
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 
+      database: 0
+      timeout: 10000
+      mock: true  # 启用本地内存缓存模式，当Redis服务不可用时使用
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+  # 文件上传配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+  # Knife4j配置
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# Telegram机器人配置（可从数据库覆盖）
+telegram:
+  bot:
+    username: Ymptbot
+    token: 7884797516:AAEI2_UooshNsintOj_cKXHrUmcR5I_SgcY
+
+# 文件上传路径配置
+file:
+  upload:
+    path: ./uploads  # 上传文件保存的路径，相对路径（Windows系统也可使用如D:/uploads/的绝对路径）
+  access:
+    url: http://localhost:8080/uploads  # 文件访问的URL前缀，根据实际部署情况修改（例如，使用域名后需要改为：https://yourdomain.com/uploads）
+
+# SpringDoc配置
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none
+    display-request-duration: true
+    filter: true
+  packages-to-scan: com.geordie.telegram.bot.ympt.controller
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match: 
+    - /api/**
+    - /bot/**
+    - /client/**
+    - /ws/**
+
+# Knife4j配置
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    enable-swagger-models: true
+    enable-document-manage: true
+    swagger-model-name: 实体类列表
+    enable-home-custom: true
+    home-custom-location: classpath:knife4j-home.md
+    enable-footer-custom: true
+    footer-custom-content: Copyright © 2024 Ympt Bot
+    enable-search: true
+    enable-footer: true
+    enable-host-text: false
+    enable-host: false
+  production: false
+  basic:
+    enable: true
+    username: admin
+    password: admin123

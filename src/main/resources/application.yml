@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: @spring.profiles.active@
+  devtools:
+    add-properties: false
+    restart:
+      # 热部署
+      enabled: false
+server:
+  port: 8080
+
+# JWT配置
+jwt:
+  # JWT加解密使用的密钥
+  secret: ymptBotSecretKey2025GeordieTelegram
+  # JWT的有效期，单位秒
+  expiration: 86400

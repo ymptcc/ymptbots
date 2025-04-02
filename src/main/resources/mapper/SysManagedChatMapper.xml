@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geordie.telegram.bot.ympt.database.mapper.SysManagedChatMapper">
+
+    <resultMap id="ManagedChatResult" type="com.geordie.telegram.bot.ympt.database.domain.SysManagedChat">
+        <id property="id" column="id"/>
+        <result property="chatId" column="chat_id"/>
+        <result property="chatType" column="chat_type"/>
+        <result property="chatName" column="chat_name"/>
+        <result property="chatTitle" column="chat_title"/>
+        <result property="isBotAdmin" column="is_bot_admin"/>
+        <result property="enableMessageDelete" column="enable_message_delete"/>
+        <result property="enableBan" column="enable_ban"/>
+        <result property="enableKick" column="enable_kick"/>
+        <result property="resetPeriod" column="reset_period"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectManagedChatVo">
+        select id, chat_id, chat_type, chat_name, chat_title, is_bot_admin, 
+               enable_message_delete, enable_ban, enable_kick, reset_period,
+               create_time, update_time, create_by, update_by, remark
+        from sys_managed_chat
+    </sql>
+
+    <select id="selectManagedChatList" resultMap="ManagedChatResult">
+        <include refid="selectManagedChatVo"/>
+        order by id asc
+    </select>
+    
+    <select id="selectManagedChatByChatId" parameterType="String" resultMap="ManagedChatResult">
+        <include refid="selectManagedChatVo"/>
+        where chat_id = #{chatId}
+    </select>
+    
+    <insert id="insertManagedChat" parameterType="com.geordie.telegram.bot.ympt.database.domain.SysManagedChat" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_managed_chat (
+            chat_id, chat_type, chat_name, chat_title, is_bot_admin,
+            enable_message_delete, enable_ban, enable_kick, reset_period,
+            create_time, update_time, create_by, update_by, remark
+        ) values (
+            #{chatId}, #{chatType}, #{chatName}, #{chatTitle}, #{isBotAdmin},
+            #{enableMessageDelete}, #{enableBan}, #{enableKick}, #{resetPeriod},
+            #{createTime}, #{updateTime}, #{createBy}, #{updateBy}, #{remark}
+        )
+    </insert>
+    
+    <update id="updateManagedChat" parameterType="com.geordie.telegram.bot.ympt.database.domain.SysManagedChat">
+        update sys_managed_chat
+        <set>
+            <if test="chatType != null">chat_type = #{chatType},</if>
+            <if test="chatName != null">chat_name = #{chatName},</if>
+            <if test="chatTitle != null">chat_title = #{chatTitle},</if>
+            <if test="isBotAdmin != null">is_bot_admin = #{isBotAdmin},</if>
+            <if test="enableMessageDelete != null">enable_message_delete = #{enableMessageDelete},</if>
+            <if test="enableBan != null">enable_ban = #{enableBan},</if>
+            <if test="enableKick != null">enable_kick = #{enableKick},</if>
+            <if test="resetPeriod != null">reset_period = #{resetPeriod},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where chat_id = #{chatId}
+    </update>
+    
+    <delete id="deleteManagedChatByChatId" parameterType="String">
+        delete from sys_managed_chat where chat_id = #{chatId}
+    </delete>
+</mapper> 

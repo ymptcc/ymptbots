@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geordie.telegram.bot.ympt.database.mapper.SysViolationLogMapper">
+
+    <resultMap id="ViolationLogResult" type="com.geordie.telegram.bot.ympt.database.domain.SysViolationLog">
+        <id property="id" column="id"/>
+        <result property="chatId" column="chat_id"/>
+        <result property="chatName" column="chat_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="messageId" column="message_id"/>
+        <result property="messageText" column="message_text"/>
+        <result property="triggeredWord" column="triggered_word"/>
+        <result property="actionType" column="action_type"/>
+        <result property="operationType" column="operation_type"/>
+        <result property="operatorId" column="operator_id"/>
+        <result property="banDuration" column="ban_duration"/>
+        <result property="actionTime" column="action_time"/>
+        <result property="operationResult" column="operation_result"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectViolationLogVo">
+        select id, chat_id, chat_name, user_id, user_name, message_id, message_text,
+               triggered_word, action_type, operation_type, operator_id, ban_duration,
+               action_time, operation_result, error_message, create_time
+        from sys_violation_log
+    </sql>
+
+    <select id="selectViolationLogsByChatId" parameterType="String" resultMap="ViolationLogResult">
+        <include refid="selectViolationLogVo"/>
+        where chat_id = #{chatId}
+        order by id desc
+    </select>
+    
+    <select id="selectViolationLogsByUser" resultMap="ViolationLogResult">
+        <include refid="selectViolationLogVo"/>
+        where chat_id = #{chatId} and user_id = #{userId}
+        order by id desc
+    </select>
+    
+    <insert id="insertViolationLog" parameterType="com.geordie.telegram.bot.ympt.database.domain.SysViolationLog" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_violation_log (
+            chat_id, chat_name, user_id, user_name, message_id, message_text,
+            triggered_word, action_type, operation_type, operator_id, ban_duration,
+            action_time, operation_result, error_message, create_time
+        ) values (
+            #{chatId}, #{chatName}, #{userId}, #{userName}, #{messageId}, #{messageText},
+            #{triggeredWord}, #{actionType}, #{operationType}, #{operatorId}, #{banDuration},
+            #{actionTime}, #{operationResult}, #{errorMessage}, #{createTime}
+        )
+    </insert>
+    
+    <delete id="deleteViolationLogsByChatId" parameterType="String">
+        delete from sys_violation_log where chat_id = #{chatId}
+    </delete>
+    
+    <delete id="deleteViolationLogsByUser">
+        delete from sys_violation_log where chat_id = #{chatId} and user_id = #{userId}
+    </delete>
+</mapper> 

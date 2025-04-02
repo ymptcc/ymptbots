@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geordie.telegram.bot.ympt.database.mapper.SysUserViolationMapper">
+
+    <resultMap id="UserViolationResult" type="com.geordie.telegram.bot.ympt.database.domain.SysUserViolation">
+        <id property="id" column="id"/>
+        <result property="chatId" column="chat_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="firstName" column="first_name"/>
+        <result property="lastName" column="last_name"/>
+        <result property="violationCount" column="violation_count"/>
+        <result property="lastViolationTime" column="last_violation_time"/>
+        <result property="resetTime" column="reset_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectUserViolationVo">
+        select id, chat_id, user_id, user_name, first_name, last_name,
+               violation_count, last_violation_time, reset_time, create_time, update_time, remark
+        from sys_user_violation
+    </sql>
+
+    <select id="selectUserViolationsByChatId" parameterType="String" resultMap="UserViolationResult">
+        <include refid="selectUserViolationVo"/>
+        where chat_id = #{chatId}
+        order by violation_count desc
+    </select>
+    
+    <select id="selectUserViolation" resultMap="UserViolationResult">
+        <include refid="selectUserViolationVo"/>
+        where chat_id = #{chatId} and user_id = #{userId}
+        limit 1
+    </select>
+    
+    <insert id="insertUserViolation" parameterType="com.geordie.telegram.bot.ympt.database.domain.SysUserViolation" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user_violation (
+            chat_id, user_id, user_name, first_name, last_name,
+            violation_count, last_violation_time, reset_time, create_time, update_time, remark
+        ) values (
+            #{chatId}, #{userId}, #{userName}, #{firstName}, #{lastName},
+            #{violationCount}, #{lastViolationTime}, #{resetTime}, #{createTime}, #{updateTime}, #{remark}
+        )
+    </insert>
+    
+    <update id="updateUserViolation" parameterType="com.geordie.telegram.bot.ympt.database.domain.SysUserViolation">
+        update sys_user_violation
+        <set>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="firstName != null">first_name = #{firstName},</if>
+            <if test="lastName != null">last_name = #{lastName},</if>
+            <if test="violationCount != null">violation_count = #{violationCount},</if>
+            <if test="lastViolationTime != null">last_violation_time = #{lastViolationTime},</if>
+            <if test="resetTime != null">reset_time = #{resetTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where chat_id = #{chatId} and user_id = #{userId}
+    </update>
+    
+    <delete id="deleteUserViolationById" parameterType="Long">
+        delete from sys_user_violation where id = #{id}
+    </delete>
+    
+    <delete id="deleteUserViolationsByChatId" parameterType="String">
+        delete from sys_user_violation where chat_id = #{chatId}
+    </delete>
+    
+    <delete id="deleteUserViolation">
+        delete from sys_user_violation where chat_id = #{chatId} and user_id = #{userId}
+    </delete>
+</mapper> 
